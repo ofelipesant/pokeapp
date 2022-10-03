@@ -5,8 +5,8 @@ export default function PokemonCard(props){
     
     return(
         <View style={style.container}>
-            <Text>Testando essa bosta</Text>
             <Text style={style.text}>{pokemons.name}</Text>
+            <Text style={style.text}>{pokemons.order}</Text>
         </View>
     )
 }

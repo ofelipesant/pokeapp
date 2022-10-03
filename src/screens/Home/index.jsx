@@ -1,28 +1,30 @@
 import React from "react";
 import Header from "../../components/Header";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { PokemonContext } from "../../contexts/pokemonContext";
 import { getPokemons } from "../../services/getPokemons";
+import {getDataPokemons } from "../../services/getDataPokemons";
 import { FlatList, View, Text } from "react-native";
 import PokemonCard from "../../components/PokemonCard";
 import FooterLoading from "../../components/FooterLoading";
 
 export default function Home(){
-    const { isLoading, setIsLoading, pokemonsList, setPokemonsList } = useContext(PokemonContext)
-    const [ offSetApi, setOffSetApi ] = useState(0)
-    const [page, setPage] = useState(0)
+    const { isLoading, setIsLoading, pokemonsList, setPokemonsList, offSet, setOffSet, page, setPage} = useContext(PokemonContext)
+    const per_page = 50
 
     async function fetchPokemons(){
-        const per_page = 50
-        
         try{
+            if(isLoading == true) return
             setIsLoading(true)
-            const data = await getPokemons(per_page, offSetApi)
-            const results = data.results
+            const data = await getPokemons(per_page, offSet)
+    
+            const promises = data.results.map(async (pokemon) => {
+                return await getDataPokemons(pokemon.url)
+            })
             
-            setPokemonsList([{...pokemonsList}, ...results])
-            setPage(page+1)
-            setOffSetApi(per_page*page)
+            const results = await Promise.all(promises)
+            setPokemonsList([...pokemonsList, ...results])
+            setPage(page + 1)
             setIsLoading(false)
     
         } catch(error){
@@ -33,13 +35,17 @@ export default function Home(){
     useEffect(() => {
         fetchPokemons()
     }, [])
+
+    useEffect(() => {
+        setOffSet(per_page*page)
+    },[page])
+
     return(
         <View>
-            <Text>Testando</Text>
             <FlatList
             data={pokemonsList}
             renderItem={({item}) => <PokemonCard pokemons={item}/>}
-            onEndReached={fetchPokemons()}
+            onEndReached={fetchPokemons}
             onEndReachedThreshold={0.1}
             ListFooterComponent={<FooterLoading loading={isLoading}/>}
             />
