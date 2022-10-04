@@ -1,35 +1,39 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { getImageDefault } from "../../../assets/helpers/getImageDefault";
 
 export default function PokemonCard(props){
-    const { pokemons } = props
+    const { pokemons, navigation } = props
+    const pokemonImage = getImageDefault(pokemons.id)
 
     return(
-        <View style={style.container}>
-            <View>
-                <Text style={style.text}>#{pokemons.order}</Text>
-                <Text style={style.text}>{pokemons.name}</Text>
-            </View>
+        <TouchableOpacity onPress={() => navigation.navigate("pokemonDetails", pokemons)}>
+            <View style={style.container}>
+                <View>
+                    <Text style={style.text}>#{pokemons.id}</Text>
+                    <Text style={style.text}>{pokemons.name}</Text>
+                </View>
 
-            <View>
-                <Image 
-                source={{uri: pokemons.sprites.front_default}}
-                resizeMode="contain"  
-                style={{height: 100, width: 100 }}
-                />
-            </View>
+                <View>
+                    <Image 
+                    source={{uri: pokemonImage}}
+                    resizeMode="contain"  
+                    style={{height: 100, width: 100 }}
+                    />
+                </View>
 
-            <View>
-                {pokemons.types && pokemons.types.map((type, index) => {
-                    return(
-                        <View key={index}>
-                            <Text>
-                                {type.type.name}
-                            </Text>
-                        </View>
-                    )
-                })}
+                <View>
+                    {pokemons.types && pokemons.types.map((type, index) => {
+                        return(
+                            <View key={index}>
+                                <Text>
+                                    {type.type.name}
+                                </Text>
+                            </View>
+                        )
+                    })}
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

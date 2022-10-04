@@ -1,13 +1,10 @@
-import { SafeAreaView } from 'react-native';
-import Home from './src/screens/Home';
+import { Routes } from './src/routes';
 import { PokemonContextProvider } from './src/contexts/pokemonContext';
 
 export default function App() {
   return (
     <PokemonContextProvider>
-      <SafeAreaView>
-        <Home/>
-      </SafeAreaView>
+      <Routes/>
     </PokemonContextProvider>
   );
 }
