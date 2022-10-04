@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import { PokemonContext } from "../../contexts/pokemonContext";
 import { getPokemons } from "../../services/getPokemons";
 import {getDataPokemons } from "../../services/getDataPokemons";
-import { FlatList, View, Text } from "react-native";
+import { FlatList, View, StyleSheet } from "react-native";
 import PokemonCard from "../../components/PokemonCard";
 import FooterLoading from "../../components/FooterLoading";
 
@@ -42,6 +42,7 @@ export default function Home(){
 
     return(
         <View>
+            <Header/>
             <FlatList
             data={pokemonsList}
             renderItem={({item}) => <PokemonCard pokemons={item}/>}
