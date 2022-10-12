@@ -10,11 +10,17 @@ export function BaseRoutes(){
             <Screen
                 name="home"
                 component={Home}
+                options={{
+                    headerShown: false,
+                }}
             />
 
             <Screen
                 name="pokemonDetails"
                 component={PokemonDetails}
+                options={{
+                    title: '',
+                }}
             />
         </Navigator>
     )
